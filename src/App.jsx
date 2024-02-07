@@ -14,29 +14,47 @@ import Home from "./components/Home";
 import About from "./components/About";
 import Profile from "./components/Profile";
 import { Routes, Route } from "react-router-dom";
+import { useState, useEffect } from "react";
+import teacherService from "./services/teacherService";
 
 function App() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedTeacher");
+
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
+      setUser(user);
+      teacherService.setToken(user.token);
+    }
+  }, []);
   return (
     <>
-      {/* <Login /> */}
-      <Registration />
-      {/* <div>
-        {" "}
-        <Navbar />
+      <div>
+        {user === null ? (
+          <>
+            <Login />
+          </>
+        ) : (
+          <>
+            {" "}
+            <Navbar user={user} setUser={setUser} />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/kra1" element={<Kra1 />} />
+              <Route path="/kra2" element={<Kra2 />} />
+              <Route path="/kra3" element={<Kra3 />} />
+              <Route path="/kra4" element={<Kra4 />} />
+              <Route path="/plusFactor" element={<PlusFactor />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/registration" element={<Registration />} />
+              <Route path="/login" element={<Login />} />
+            </Routes>
+          </>
+        )}
       </div>
-
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/kra1" element={<Kra1 />} />
-        <Route path="/kra2" element={<Kra2 />} />
-        <Route path="/kra3" element={<Kra3 />} />
-        <Route path="/kra4" element={<Kra4 />} />
-        <Route path="/plusFactor" element={<PlusFactor />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/registration" element={<Registration />} />
-        <Route path="/login" element={<Login />} />
-      </Routes> */}
     </>
   );
 }
