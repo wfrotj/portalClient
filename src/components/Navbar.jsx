@@ -1,7 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
-function Navbar() {
+function Navbar({ user, setUser }) {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) navigate("/login");
+  }, [user, navigate]);
+
+  const handleLogout = () => {
+    window.localStorage.removeItem("loggedTeacher");
+    setUser(null);
+  };
   return (
     <header>
       <div className="logo">
@@ -48,6 +59,15 @@ function Navbar() {
           <Link to="/">Home</Link>
         </li>
       </ul>
+      <div className="flex gap-2 justify-end  ">
+        <button
+          onClick={handleLogout}
+          className="text-2xl hover:text-red-600 cursor-pointer "
+        >
+          {" "}
+          Logout
+        </button>
+      </div>
     </header>
   );
 }

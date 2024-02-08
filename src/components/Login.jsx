@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import loginService from "../services/loginService";
 import teacherService from "../services/teacherService";
 
@@ -53,6 +53,17 @@ function Login({ user, setUser }) {
           <button type="submit" className="login-btn">
             Login
           </button>
+        </div>
+        <div>
+          <p className="text-center">
+            Don't have an account? <br></br>
+            <Link
+              to="/registration"
+              className="text-black font-extrabold underline"
+            >
+              Register here.
+            </Link>
+          </p>
         </div>
       </form>
     </div>
