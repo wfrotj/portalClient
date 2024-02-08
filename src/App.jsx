@@ -8,6 +8,7 @@ import Kra4 from "./pages/Kra4";
 
 import Registration from "./components/Registration";
 import Login from "./components/Login";
+import Landing from "./components/Landing";
 
 import PlusFactor from "./pages/PlusFactor";
 import Home from "./components/Home";
@@ -34,7 +35,11 @@ function App() {
       <div>
         {user === null ? (
           <>
-            <Login />
+            <Routes>
+              <Route path="/" element={<Landing />} /> /
+              <Route path="/registration" element={<Registration />} />
+              <Route path="/login" element={<Login />} />
+            </Routes>
           </>
         ) : (
           <>
@@ -49,8 +54,6 @@ function App() {
               <Route path="/plusFactor" element={<PlusFactor />} />
               <Route path="/about" element={<About />} />
               <Route path="/profile" element={<Profile />} />
-              <Route path="/registration" element={<Registration />} />
-              <Route path="/login" element={<Login />} />
             </Routes>
           </>
         )}

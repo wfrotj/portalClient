@@ -29,7 +29,7 @@ function Registration() {
       })
       .then((res) => {
         //         console.log(res);
-        navigate("/profile/login");
+        navigate("/home");
         setUsername("");
         setPassword("");
         setFirstName("");
@@ -43,7 +43,7 @@ function Registration() {
       .catch(() => alert("Error occured"));
   };
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center h-screen">
       <h1>Registration</h1>
 
       <div>
@@ -118,12 +118,20 @@ function Registration() {
               />
             </div> */}
           </div>
-          <div>
-            <button className="submit-form" type="submit">
+          <div className="text-center">
+            <button
+              className="submit-form text-black font-extrabold underline "
+              type="submit"
+            >
               Register
             </button>
           </div>
         </form>
+      </div>
+      <div>
+        <button className="back-button" onClick={() => navigate("/")}>
+          Back
+        </button>
       </div>
     </div>
   );

@@ -19,7 +19,7 @@ function Login({ user, setUser }) {
       .then((res) => {
         window.localStorage.setItem("loggedTeacher", JSON.stringify(res));
         teacherService.setToken(res);
-        navigate("/");
+        navigate("/home");
 
         setUsername("");
         setPassword("");
