@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import registerService from "../services/registerService";
 import { useNavigate } from "react-router-dom";
+import teacherService from "../services/teacherService";
 
-function Registration() {
+function Registration({ user, setUser }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -12,6 +13,21 @@ function Registration() {
   //   const [employeeNumber, setEmployeeNumber] = useState("");
   //   const [depEdEmail, setDepEdEmail] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedTeacher");
+
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
+      setUser(user);
+      teacherService.setToken(user.token);
+    }
+
+    // Include 'user' in the dependency array
+    // if (user === null) {
+    //   navigate("/login");
+    // }
+  }, []);
 
   const handleRegistration = (e) => {
     e.preventDefault();
@@ -29,7 +45,7 @@ function Registration() {
       })
       .then((res) => {
         //         console.log(res);
-        navigate("/home");
+        navigate("/");
         setUsername("");
         setPassword("");
         setFirstName("");
@@ -129,7 +145,7 @@ function Registration() {
         </form>
       </div>
       <div>
-        <button className="back-button" onClick={() => navigate("/")}>
+        <button className="back-button" onClick={() => navigate("/login")}>
           Back
         </button>
       </div>
