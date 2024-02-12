@@ -1,19 +1,12 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
-function Landing() {
+function Landing({ user, setUser }) {
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h2>Welcome to Educators Portal</h2>
-      <div>
-        <p>
-          Do you have an account already ? <Link to="/login"> Login here</Link>
-        </p>
-        <p>
-          No account yet? <Link to="/registration">Register here</Link>
-        </p>
-      </div>
-    </div>
+    <>
+      <Navbar user={user} setUser={setUser} />
+      <Outlet />
+    </>
   );
 }
 

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import "./App.css";
 import React from "react";
 import Navbar from "./components/Navbar";
@@ -30,34 +31,26 @@ function App() {
       teacherService.setToken(user.token);
     }
   }, []);
+
   return (
     <>
-      <div>
-        {user === null ? (
-          <>
-            <Routes>
-              <Route path="/" element={<Landing />} /> /
-              <Route path="/registration" element={<Registration />} />
-              <Route path="/login" element={<Login />} />
-            </Routes>
-          </>
-        ) : (
-          <>
-            {" "}
-            <Navbar user={user} setUser={setUser} />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/kra1" element={<Kra1 />} />
-              <Route path="/kra2" element={<Kra2 />} />
-              <Route path="/kra3" element={<Kra3 />} />
-              <Route path="/kra4" element={<Kra4 />} />
-              <Route path="/plusFactor" element={<PlusFactor />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/profile" element={<Profile />} />
-            </Routes>
-          </>
-        )}
-      </div>
+      <Routes>
+        <Route
+          path="/login"
+          element={<Login setUser={setUser} user={user} />}
+        />
+        <Route path="/registration" element={<Registration />} />
+        <Route path="/" element={<Landing user={user} setUser={setUser} />}>
+          <Route index element={<Home />} />
+          <Route path="plusFactor" element={<PlusFactor />} />
+          <Route path="kra1" element={<Kra1 />} />
+          <Route path="kra2" element={<Kra2 />} />
+          <Route path="kra3" element={<Kra3 />} />
+          <Route path="kra4" element={<Kra4 />} />
+          <Route path="about" element={<About />} />
+          <Route path="profile" element={<Profile />} />
+        </Route>
+      </Routes>
     </>
   );
 }

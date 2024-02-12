@@ -9,6 +9,9 @@ function Login({ user, setUser }) {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (user?.token) navigate("/");
+  }, [user, navigate]);
   const handleLogin = (e) => {
     e.preventDefault();
     loginService
@@ -19,7 +22,6 @@ function Login({ user, setUser }) {
       .then((res) => {
         window.localStorage.setItem("loggedTeacher", JSON.stringify(res));
         teacherService.setToken(res);
-        navigate("/home");
 
         setUsername("");
         setPassword("");
@@ -31,6 +33,7 @@ function Login({ user, setUser }) {
         setPassword("");
       });
   };
+
   return (
     <div className="login-form flex flex-col items-center justify-center h-screen">
       <h1>Login</h1>
