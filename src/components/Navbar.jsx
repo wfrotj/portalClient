@@ -4,14 +4,15 @@ import { useEffect } from "react";
 
 function Navbar({ user, setUser }) {
   const navigate = useNavigate();
-  useEffect(() => {
-    if (!user) navigate("/login");
-  }, [user, navigate]);
-
   const handleLogout = () => {
     window.localStorage.removeItem("loggedTeacher");
     setUser(null);
+    navigate("/login");
   };
+
+  // useEffect(() => {
+  //   if (!user) navigate("/login");
+  // }, [user, navigate]);
 
   return (
     <>
@@ -58,6 +59,9 @@ function Navbar({ user, setUser }) {
           </li>
           <li>
             <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/learner">Learners</Link>
           </li>
         </ul>
         <div className="flex gap-2 justify-end  ">

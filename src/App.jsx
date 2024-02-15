@@ -15,13 +15,15 @@ import PlusFactor from "./pages/PlusFactor";
 import Home from "./components/Home";
 import About from "./components/About";
 import Profile from "./components/Profile";
+import Student from "./components/Student";
+
 import { Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import teacherService from "./services/teacherService";
 
 function App() {
   const [user, setUser] = useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedTeacher");
 
@@ -29,6 +31,12 @@ function App() {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
       teacherService.setToken(user.token);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
     }
   }, []);
 
@@ -49,6 +57,7 @@ function App() {
           <Route path="kra4" element={<Kra4 />} />
           <Route path="about" element={<About />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="learner" element={<Student />} />
         </Route>
       </Routes>
     </>
