@@ -1,26 +1,19 @@
 import axios from "axios";
+const baseURL = "/api/student";
+let token = null;
 
-const apiClient = axios.create({
-  baseURL: "http://localhost:5656",
-  headers: {
-    common: {
-      "Content-Type": "multipart/form-data",
-    },
-  },
-});
-// const baseURL = "http://localhost:5656";
+function setToken(newToken) {
+  token = `Bearer ${newToken}`;
+}
 
-// async function getPersons() {
-//   const response = await apiClient.get("/persons");
-//   return response.data;
-// }
-
-async function createStudent(student) {
-  const response = await apiClient.post("/api/student", student);
-  return response.data;
+function createStudent(job) {
+  const config = {
+    headers: { Authorization: token },
+  };
+  return axios.post(baseURL, job, config).then((res) => res.data);
 }
 
 export default {
+  setToken,
   createStudent,
-  // setToken,
 };

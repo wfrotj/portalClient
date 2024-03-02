@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import registerService from "../services/registerService";
 import { useNavigate } from "react-router-dom";
-import teacherService from "../services/teacherService";
+// import teacherService from "../services/teacherService";
+import studentService from "../services/studentService";
 
 function Registration({ user, setUser }) {
   const [username, setUsername] = useState("");
@@ -20,7 +21,7 @@ function Registration({ user, setUser }) {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
-      teacherService.setToken(user.token);
+      studentService.setToken(user.token);
     }
 
     // Include 'user' in the dependency array

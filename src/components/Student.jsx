@@ -1,28 +1,28 @@
 import React from "react";
 import studentService from "../services/studentService";
 import { useState } from "react";
-import teacherService from "../services/teacherService";
+// import teacherService from "../services/teacherService";
 
-function Student() {
+function Student({ students, setStudents }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const handleAddStudent = (event) => {
-    event.preventDefault();
-    teacherService.setToken(
-      JSON.parse(window.localStorage.getItem("loggedTeacher")).token
-    );
+
+  const handleAddStudent = (e) => {
+    e.preventDefault();
+    // setUserToken(
+    //   JSON.parse(window.localStorage.getItem("loggedTeacher")).token
+    // );
     const studentObject = {
-      firstName,
-      lastName,
+      firstName: firstName,
+      lastName: lastName,
     };
-    studentService
-      .createStudent(studentObject)
-      .then((studentObject) => {
-        setFirstName("");
-        setLastName("");
-        alert("Success");
-      })
-      .catch(() => alert("Error occured"));
+
+    studentService.createStudent(studentObject).then((returnedStudent) => {
+      setStudents(students.concat(returnedStudent));
+      setFirstName("");
+      setLastName("");
+      alert("Success!");
+    });
   };
 
   return (
