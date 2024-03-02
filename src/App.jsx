@@ -19,10 +19,12 @@ import Student from "./components/Student";
 
 import { Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
-import teacherService from "./services/teacherService";
+import studentService from "./services/studentService";
+// import teacherService from "./services/teacherService";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [students, setStudents] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedTeacher");
@@ -30,7 +32,7 @@ function App() {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
-      teacherService.setToken(user.token);
+      studentService.setToken(user.token);
     }
   }, []);
 
@@ -57,7 +59,10 @@ function App() {
           <Route path="kra4" element={<Kra4 />} />
           <Route path="about" element={<About />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="learner" element={<Student />} />
+          <Route
+            path="learner"
+            element={<Student students={students} setStudents={setStudents} />}
+          />
         </Route>
       </Routes>
     </>

@@ -2,7 +2,8 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import loginService from "../services/loginService";
-import teacherService from "../services/teacherService";
+// import teacherService from "../services/teacherService";
+import studentService from "../services/studentService";
 
 function Login({ user, setUser }) {
   const [username, setUsername] = useState("");
@@ -21,7 +22,7 @@ function Login({ user, setUser }) {
       })
       .then((res) => {
         window.localStorage.setItem("loggedTeacher", JSON.stringify(res));
-        teacherService.setToken(res);
+        studentService.setToken(res);
 
         setUsername("");
         setPassword("");
