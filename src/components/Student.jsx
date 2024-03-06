@@ -1,50 +1,51 @@
-import React from "react";
-import studentService from "../services/studentService";
 import { useState } from "react";
-// import teacherService from "../services/teacherService";
+import studentService from "../services/studentService";
 
 function Student({ students, setStudents }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [userToken, setUserToken] = useState("");
 
-  const handleAddStudent = (e) => {
+  const addStudent = (e) => {
     e.preventDefault();
-    // setUserToken(
-    //   JSON.parse(window.localStorage.getItem("loggedTeacher")).token
-    // );
-    const studentObject = {
-      firstName: firstName,
+    setUserToken(
+      JSON.parse(window.localStorage.getItem("loggedTeacher")).token
+    );
+    const student = {
+      firsName: firstName,
       lastName: lastName,
     };
-
-    studentService.createStudent(studentObject).then((returnedStudent) => {
-      setStudents(students.concat(returnedStudent));
-      setFirstName("");
-      setLastName("");
-      alert("Success!");
-    });
+    console.log(student);
+    studentService
+      .createStudent(student)
+      .then((returnedLearner) => {
+        setStudents(students.concat(returnedLearner));
+        setLastName("");
+        setFirstName("");
+      })
+      .catch((error) => console.log(error));
   };
-
   return (
-    <div>
-      <form onSubmit={handleAddStudent}>
+    <form onSubmit={addStudent}>
+      <div>
+        <label>First Name</label>
         <input
           type="text"
-          placeholder="Enter First Name"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
         />
+      </div>
+      <div>
+        <label>Last Name</label>
         <input
           type="text"
-          placeholder="Enter Last Name"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
         />
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
-      </form>
-    </div>
+      </div>
+
+      <button type="submit">Add</button>
+    </form>
   );
 }
 
