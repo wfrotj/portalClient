@@ -1,48 +1,31 @@
 import axios from "axios";
 
-let token = null;
-
-function setToken(newToken) {
-  token = `Bearer ${newToken}`;
-}
-// const baseUrl = "http://localhost:5665/api/student";
-
-// function createStudent(student) {
-//   return fetch(baseUrl, {
-//     method: "POST",
-//     headers: {
-//       "Content-type": "application/json",
-//     },
-//     body: JSON.stringify(student),
-//   })
-//     .then((res) => res.json())
-//     .then((data) => data);
-// }
-
-// async function createStudent(student) {
-//   const token = `Bearer ${user.token}`;
-//   const config = {
-//     headers: { Authorization: token },
-//   };
-
-//   console.log(token);
-//   return axios.post(baseUrl, user, config).then((res) => res.data);
-// }
 const apiClient = axios.create({
-  baseURL: "http://localhost:5656/api/student",
-
+  baseURL: "http://localhost:5656/api",
   headers: {
     common: {
       "Content-Type": "multipart/form-data",
     },
   },
 });
+
+function setToken(newToken) {
+  apiClient.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
+}
 async function createStudent(student) {
-  const response = await apiClient.post("/", student);
+  const response = await apiClient.post("/student", student);
   return response.data;
 }
-
+async function getStudents() {
+  const response = await apiClient.get("/student");
+  return response.data;
+}
+async function deleteStudent(id) {
+  return apiClient.delete(`/student/${id}`).then((res) => res.status);
+}
 export default {
   setToken,
   createStudent,
+  getStudents,
+  deleteStudent,
 };

@@ -1,51 +1,94 @@
-import { useState } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
+import PersonContext from "../features/PersonContext";
 import studentService from "../services/studentService";
+import LoadingContext from "../features/LoadingContext";
+import StudentList from "./StudentList";
 
-function Student({ students, setStudents }) {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [userToken, setUserToken] = useState("");
+function Student({ persons, setPersons }) {
+  const { students, setStudents } = useContext(PersonContext);
+  const [newFirstName, setNewFirstName] = useState("");
+  const [newLastName, setNewLastName] = useState("");
+  const [newPhoto, setNewPhoto] = useState(null);
+  const { loading, setLoading } = useContext(LoadingContext);
 
-  const addStudent = (e) => {
+  const fileInputRef = useRef(null);
+
+  const addPerson = (e) => {
     e.preventDefault();
-    setUserToken(
-      JSON.parse(window.localStorage.getItem("loggedTeacher")).token
-    );
-    const student = {
-      firsName: firstName,
-      lastName: lastName,
-    };
-    console.log(student);
-    studentService
-      .createStudent(student)
-      .then((returnedLearner) => {
-        setStudents(students.concat(returnedLearner));
-        setLastName("");
-        setFirstName("");
-      })
-      .catch((error) => console.log(error));
-  };
-  return (
-    <form onSubmit={addStudent}>
-      <div>
-        <label>First Name</label>
-        <input
-          type="text"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-        />
-      </div>
-      <div>
-        <label>Last Name</label>
-        <input
-          type="text"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-        />
-      </div>
 
-      <button type="submit">Add</button>
-    </form>
+    setLoading(true);
+
+    const newPersonData = new FormData();
+    newPersonData.append("image", newPhoto);
+    newPersonData.append("firstName", newFirstName);
+    newPersonData.append("lastName", newLastName);
+
+    studentService
+      .createStudent(newPersonData)
+      .then((returnedPerson) => {
+        setStudents(students.concat(returnedPerson));
+        setNewFirstName("");
+        setNewLastName("");
+        fileInputRef.current.value = null;
+      })
+      .catch((error) => alert(error.response.data.error))
+      .finally(() => setLoading(false));
+  };
+
+  return (
+    <div>
+      <form
+        onSubmit={addPerson}
+        className="bg-white flex flex-col gap-2 p-2 border-solid border-2 border-black md:max-w-xl md:mx-auto"
+      >
+        <div className="flex flex-col">
+          <label>Upload contact photo</label>
+          <input
+            className="border-solid border-2 border-slate-500 p-2"
+            type="file"
+            required
+            accept="image/*"
+            ref={fileInputRef}
+            onChange={(e) => setNewPhoto(e.target.files[0])}
+          />
+        </div>
+        <div className="flex flex-col">
+          <label>First Name</label>
+          <input
+            className="border-solid border-2 border-slate-500 p-2"
+            type="text"
+            required
+            minLength={5}
+            value={newFirstName}
+            onChange={(e) => setNewFirstName(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col">
+          <label>Last Name</label>
+          <input
+            className="border-solid border-2 border-slate-500 p-2"
+            type="text"
+            required
+            minLength={11}
+            value={newLastName}
+            onChange={(e) => setNewLastName(e.target.value)}
+          />
+        </div>
+
+        <button
+          className="bg-black rounded-xl py-2 text-white font-bold"
+          type="submit"
+        >
+          Add
+        </button>
+        <div className="laptop:flex laptop:flex-col laptop:items-center">
+          <StudentList persons={persons} setPersons={setPersons} />
+          <div className="flex flex-col items-center justify-center">
+            {/* <button onClick={scrollToTop}>Scroll to Top</button> */}
+          </div>
+        </div>
+      </form>
+    </div>
   );
 }
 
