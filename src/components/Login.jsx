@@ -26,7 +26,7 @@ function Login({ user, setUser }) {
 
         setUsername("");
         setPassword("");
-        location.reload();
+        navigate("/");
         console.log(res);
       })
       .catch((error) => {

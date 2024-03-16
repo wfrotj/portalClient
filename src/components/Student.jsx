@@ -1,93 +1,82 @@
-import { useState, useRef, useEffect, useContext } from "react";
-import PersonContext from "../features/PersonContext";
+import React, { useState, useEffect } from "react";
 import studentService from "../services/studentService";
-import LoadingContext from "../features/LoadingContext";
-import StudentList from "./StudentList";
 
-function Student({ persons, setPersons }) {
-  const { students, setStudents } = useContext(PersonContext);
-  const [newFirstName, setNewFirstName] = useState("");
-  const [newLastName, setNewLastName] = useState("");
-  const [newPhoto, setNewPhoto] = useState(null);
-  const { loading, setLoading } = useContext(LoadingContext);
+function Student({ user, setUser, students, setStudents }) {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
-  const fileInputRef = useRef(null);
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedTeacher");
 
-  const addPerson = (e) => {
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
+      setUser(user);
+      studentService.setToken(user.token);
+    }
+  }, []);
+  const handleAddVisitor = (e) => {
     e.preventDefault();
 
-    setLoading(true);
+    // setUserToken(JSON.parse(window.localStorage.getItem("loggedUser")).token);
 
-    const newPersonData = new FormData();
-    newPersonData.append("image", newPhoto);
-    newPersonData.append("firstName", newFirstName);
-    newPersonData.append("lastName", newLastName);
-
+    /* console.log(userToken); */
+    const studentObject = {
+      firstName: firstName,
+      lastName: lastName,
+    };
     studentService
-      .createStudent(newPersonData)
-      .then((returnedPerson) => {
-        setStudents(students.concat(returnedPerson));
-        setNewFirstName("");
-        setNewLastName("");
-        fileInputRef.current.value = null;
+      .createStudent(studentObject)
+      .then((returnedStudent) => {
+        setStudents(students.concat(returnedStudent));
+        setFirstName("");
+        setLastName("");
       })
-      .catch((error) => alert(error.response.data.error))
-      .finally(() => setLoading(false));
+      .catch((error) => {
+        console.log(error);
+
+        alert(`Please click "ADD" button again`);
+      });
   };
-
   return (
-    <div>
-      <form
-        onSubmit={addPerson}
-        className="bg-white flex flex-col gap-2 p-2 border-solid border-2 border-black md:max-w-xl md:mx-auto"
-      >
-        <div className="flex flex-col">
-          <label>Upload contact photo</label>
-          <input
-            className="border-solid border-2 border-slate-500 p-2"
-            type="file"
-            required
-            accept="image/*"
-            ref={fileInputRef}
-            onChange={(e) => setNewPhoto(e.target.files[0])}
-          />
-        </div>
-        <div className="flex flex-col">
-          <label>First Name</label>
-          <input
-            className="border-solid border-2 border-slate-500 p-2"
-            type="text"
-            required
-            minLength={5}
-            value={newFirstName}
-            onChange={(e) => setNewFirstName(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-col">
-          <label>Last Name</label>
-          <input
-            className="border-solid border-2 border-slate-500 p-2"
-            type="text"
-            required
-            minLength={11}
-            value={newLastName}
-            onChange={(e) => setNewLastName(e.target.value)}
-          />
-        </div>
-
-        <button
-          className="bg-black rounded-xl py-2 text-white font-bold"
-          type="submit"
-        >
-          Add
-        </button>
-        <div className="laptop:flex laptop:flex-col laptop:items-center">
-          <StudentList persons={persons} setPersons={setPersons} />
-          <div className="flex flex-col items-center justify-center">
-            {/* <button onClick={scrollToTop}>Scroll to Top</button> */}
+    <div className="background-modal tw-z-[1500] ">
+      <div className="remove-user-modal tw-h-[60vh]">
+        {/*  */}
+        ADD NEW STUDENT
+        <br />
+        <form onSubmit={handleAddVisitor}>
+          <div className="tw-flex tw-flex-col">
+            <label>FIRST NAME</label>
+            <input
+              type="text"
+              name="firstname"
+              value={firstName}
+              className="tw-border-solid tw-border-2 tw-border-slate-500 tw-p-2"
+              onChange={(e) => setFirstName(e.target.value)}
+            />
           </div>
-        </div>
-      </form>
+          <div className="tw-flex tw-flex-col">
+            <label>LAST NAME </label>
+            <input
+              type="text"
+              name="name"
+              value={lastName}
+              className="tw-border-solid tw-border-2 tw-border-slate-500 tw-p-2"
+              onChange={(e) => setLastName(e.target.value)}
+            />
+          </div>
+
+          <button
+            className="modalButton tw-bg-black"
+            /*  onClick={() => {
+            setShow(null);
+          }} */
+            type="submit"
+            name="submitButton"
+          >
+            ADD
+          </button>
+        </form>
+      </div>{" "}
     </div>
   );
 }
