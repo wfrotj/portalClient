@@ -30,6 +30,7 @@ function Student({ user, setUser, students, setStudents }) {
         setStudents(students.concat(returnedStudent));
         setFirstName("");
         setLastName("");
+        console.log(returnedStudent);
       })
       .catch((error) => {
         console.log(error);
