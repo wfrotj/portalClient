@@ -4,7 +4,7 @@ const apiClient = axios.create({
   baseURL: "http://localhost:5656/api",
   headers: {
     common: {
-      "Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
     },
   },
 });
@@ -20,12 +20,9 @@ async function getStudents() {
   const response = await apiClient.get("/student");
   return response.data;
 }
-async function deleteStudent(id) {
-  return apiClient.delete(`/student/${id}`).then((res) => res.status);
-}
+
 export default {
   setToken,
   createStudent,
   getStudents,
-  deleteStudent,
 };

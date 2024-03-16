@@ -40,6 +40,8 @@ function App() {
     }
     if (user) {
       navigate("/");
+    } else {
+      navigate("/login");
     }
   }, []);
 
