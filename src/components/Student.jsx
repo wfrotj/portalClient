@@ -4,6 +4,7 @@ import studentService from "../services/studentService";
 function Student({ user, setUser, students, setStudents }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [section, setSection] = useState("");
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedTeacher");
@@ -23,6 +24,7 @@ function Student({ user, setUser, students, setStudents }) {
     const studentObject = {
       firstName: firstName,
       lastName: lastName,
+      section: section,
     };
     studentService
       .createStudent(studentObject)
@@ -64,6 +66,30 @@ function Student({ user, setUser, students, setStudents }) {
               className="tw-border-solid tw-border-2 tw-border-slate-500 tw-p-2"
               onChange={(e) => setLastName(e.target.value)}
             />
+          </div>
+          <div className="tw-flex tw-flex-col">
+            <label>PURPOSE </label>
+            <select
+              name="purpose"
+              id="purposeList"
+              value={section}
+              className="tw-border-solid tw-border-2 tw-border-slate-500 tw-p-2"
+              onChange={(e) => setSection(e.target.value)}
+            >
+              <option selected> Choose Section</option>
+              <option value="Iceland"> Iceland</option>
+              <option value="India">India</option>
+              <option value="Indonesia">Indonesia</option>
+              <option value="Italy">Italy</option>
+              <option value="Jamaica">Jamaica</option>
+            </select>
+            {/*    <input
+              type="text"
+              name="purpose"
+              value={purpose}
+              className="tw-border-solid tw-border-2 tw-border-slate-500 tw-p-2"
+              onChange={(e) => setPurpose(e.target.value)}
+            /> */}
           </div>
 
           <button
